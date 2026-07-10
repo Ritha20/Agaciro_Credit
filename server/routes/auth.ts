@@ -6,12 +6,20 @@ import { prisma } from "../db/client";
 const router = Router();
 
 const require = createRequire(import.meta.url);
-const AfricasTalking = require("africastalking");
-const at = AfricasTalking({
-  apiKey: process.env.AT_API_KEY!,
-  username: process.env.AT_USERNAME!,
-});
-const sms = at.SMS;
+
+// Lazy init — only created when first OTP is sent so missing env vars don't crash startup
+let sms: any = null;
+function getSms() {
+  if (!sms) {
+    const AfricasTalking = require("africastalking");
+    const at = AfricasTalking({
+      apiKey: process.env.AT_API_KEY || "sandbox",
+      username: process.env.AT_USERNAME || "sandbox",
+    });
+    sms = at.SMS;
+  }
+  return sms;
+}
 
 const generateOtp = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
@@ -68,7 +76,7 @@ router.post("/request-otp", async (req, res) => {
 
     try {
       await Promise.race([
-        sms.send({
+        getSms().send({
           to: [phone],
           message: `Your Agaciro Credit code is: ${code}. Valid for 10 minutes. Do not share this code.`,
         }),
