@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Dark background circle -->
+  <circle cx="50" cy="50" r="50" fill="#020617"/>
+
+  <!-- Shield (Dignity/Trust) -->
+  <path
+    d="M50 10C28 14 20 23 20 44C20 65 37 82 50 90C63 82 80 65 80 44C80 23 72 14 50 10Z"
+    fill="#020617"
+    stroke="#eab308"
+    stroke-width="4"
+  />
+
+  <!-- Shield inner green highlight -->
+  <path
+    d="M50 16C33 19.5 26.5 26 26.5 44C26.5 61 40 75.5 50 82.5"
+    stroke="#22c55e"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- Rising growth curve -->
+  <path
+    d="M33 68C42 64 48 50 61 41"
+    stroke="#22c55e"
+    stroke-width="5.5"
+    stroke-linecap="round"
+  />
+
+  <!-- Arrow head (gold) -->
+  <path
+    d="M52 41H63V52"
+    stroke="#eab308"
+    stroke-width="5.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Center spark dot -->
+  <circle cx="50" cy="50" r="3.5" fill="#ffffff"/>
+</svg>

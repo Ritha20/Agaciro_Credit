@@ -1,0 +1,6 @@
+{
+  "name": "Agaciro Credit",
+  "description": "Financial inclusion credit scoring and wealth coaching system for East Africa, featuring an AI credit planner and automated Forex trading bot simulation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

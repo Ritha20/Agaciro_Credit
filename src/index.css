@@ -1,0 +1,351 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Agaciro Color Palette */
+  --color-brand-blue-50: #f0f4ff;
+  --color-brand-blue-100: #e0e8ff;
+  --color-brand-blue-600: #1d4ed8;
+  --color-brand-blue-700: #1e3a8a;
+  --color-brand-blue-900: #1e293b;
+  
+  --color-brand-green-50: #ecfdf5;
+  --color-brand-green-500: #10b981;
+  --color-brand-green-600: #059669;
+  
+  --color-brand-gold-50: #fffbeb;
+  --color-brand-gold-400: #fbbf24;
+  --color-brand-gold-500: #f59e0b;
+  --color-brand-gold-600: #d97706;
+}
+
+/* Custom CSS variables for the Midnight vs High-Contrast Theme */
+:root {
+  --bg-app: #0F172A;
+  --bg-header: #020617;
+  --bg-card: #020617;
+  --bg-card-alt: #090d1f;
+  --bg-input: #020617;
+  --border-color: #1e293b;
+  --text-primary: #cbd5e1; /* slate-300 */
+  --text-secondary: #94a3b8; /* slate-400 */
+  --text-title: #ffffff;
+  --card-shadow: none;
+}
+
+.theme-light {
+  --bg-app: #f1f5f9; /* Premium slate ivory outer canvas */
+  --bg-header: #ffffff; /* Pure crisp white header */
+  --bg-card: #ffffff; /* Pure white cards with clear borders */
+  --bg-card-alt: #f8fafc; /* Lighter inner listing sections */
+  --bg-input: #ffffff;
+  --border-color: #cbd5e1; /* Highly visible slate outline under sunlight */
+  --text-primary: #0f172a; /* Strong legible deep charcoal reading */
+  --text-secondary: #334155; /* highly legible warm slate text */
+  --text-title: #020617; /* Midnight major headlines */
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(0, 0, 0, 0.02);
+}
+
+/* Target global body override when theme-light class is present on root */
+.theme-light,
+.theme-light body {
+  background-color: var(--bg-app) !important;
+  color: var(--text-primary) !important;
+}
+
+/* High-Contrast Professional Light Theme Overrides using bulletproof attribute selectors */
+
+/* 1. CONTAINER BACKGROUNDS: Convert all black/dark blocks into clean light/white containers */
+.theme-light [class*="bg-[#020617]"],
+.theme-light [class*="bg-[#0f172a]"],
+.theme-light [class*="bg-[#0F172A]"],
+.theme-light [class*="bg-slate-950"] {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+/* Sub-listings, tables, badges, inactive buttons and list items */
+.theme-light [class*="bg-[#050814]"],
+.theme-light [class*="bg-[#0c192d]"],
+.theme-light [class*="bg-[#090d1f]"],
+.theme-light [class*="bg-slate-900"],
+.theme-light [class*="bg-slate-850"],
+.theme-light [class*="bg-slate-800"] {
+  background-color: var(--bg-card-alt) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Fraction-opacity overlays or transparent utility items */
+.theme-light [class*="\/40"],
+.theme-light [class*="\/55"],
+.theme-light [class*="\/60"],
+.theme-light [class*="\/80"] {
+  background-color: var(--bg-card-alt) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Specific yellow highlighting backgrounds (e.g. selection states) */
+.theme-light [class*="bg-[#020617]/30"],
+.theme-light [class*="bg-[#020617]/55"] {
+  background-color: #fffbeb !important;
+  border-color: #f59e0b !important;
+}
+
+/* Hover highlights for items, inputs & options */
+.theme-light [class*="hover:bg-slate-900"]:hover,
+.theme-light [class*="hover:bg-slate-800"]:hover,
+.theme-light [class*="hover:bg-slate-950"]:hover {
+  background-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* 2. TEXT CONTRAST: Flip all light/white texts to highly legible charcoal or midnight black */
+.theme-light [class*="text-white"],
+.theme-light [class*="text-slate-100"],
+.theme-light [class*="text-slate-200"],
+.theme-light [class*="text-slate-250"],
+.theme-light [class*="text-slate-300"],
+.theme-light [class*="text-slate-350"] {
+  color: var(--text-primary) !important;
+}
+
+/* Convert grey text utilities into readable medium grey/slates */
+.theme-light [class*="text-slate-400"],
+.theme-light [class*="text-slate-450"],
+.theme-light [class*="text-slate-500"],
+.theme-light [class*="text-slate-550"],
+.theme-light [class*="text-slate-600"] {
+  color: var(--text-secondary) !important;
+}
+
+/* Make hover-to-white classes work brilliantly by flipping to dark hover color */
+.theme-light [class*="hover:text-white"]:hover {
+  color: #020617 !important;
+}
+
+/* 3. BORDERS: Override dark layout boundaries to clean high-contrast light borders */
+.theme-light [class*="border-slate-800"],
+.theme-light [class*="border-slate-850"],
+.theme-light [class*="border-slate-900"],
+.theme-light [class*="border-slate-705"],
+.theme-light [class*="border-slate-700"],
+.theme-light [class*="border-slate-805"] {
+  border-color: var(--border-color) !important;
+}
+
+/* SVG stroke rendering paths (critical for map networks & donut chart backgrounds) */
+.theme-light .stroke-slate-800,
+.theme-light .stroke-slate-700 {
+  stroke: #e2e8f0 !important;
+}
+
+/* Forms, Inputs and Dropdown selectors */
+.theme-light input,
+.theme-light select,
+.theme-light textarea {
+  background-color: var(--bg-input) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+.theme-light input::placeholder {
+  color: #64748b !important;
+}
+
+/* Pre formats & Code snippet outputs */
+.theme-light pre,
+.theme-light code {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Header & navigation tabs */
+.theme-light header {
+  background-color: var(--bg-header) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+.theme-light #navigation-root {
+  border-bottom-color: var(--border-color) !important;
+}
+.theme-light #navigation-root button {
+  color: var(--text-secondary) !important;
+}
+.theme-light #navigation-root button.border-amber-500 {
+  border-color: #d97706 !important;
+  color: #9a3412 !important;
+  background-color: #fffbeb !important;
+}
+.theme-light #navigation-root button:hover {
+  color: #9a3412 !important;
+}
+
+/* Global footer tag */
+.theme-light footer {
+  background-color: var(--bg-header) !important;
+  border-top-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+.theme-light footer strong {
+  color: var(--text-title) !important;
+}
+
+/* Indicator & sliders */
+.theme-light .bg-linear-to-b {
+  background: #ffffff !important;
+  border-color: var(--border-color) !important;
+}
+.theme-light .shadow-inner {
+  background-color: #e2e8f0 !important;
+}
+.theme-light input[type="range"] {
+  background-color: #cbd5e1 !important;
+  accent-color: #d97706 !important;
+}
+.theme-light .border-dashed {
+  border-color: var(--border-color) !important;
+}
+
+/* Amber rewards and badges high-contrast overrides (AAA outdoor accessibility) */
+.theme-light .text-amber-400,
+.theme-light .text-amber-450,
+.theme-light .text-amber-500,
+.theme-light .text-yellow-400,
+.theme-light .text-yellow-500,
+.theme-light .text-\\[\\#eab308\\] {
+  color: #b45309 !important;
+}
+.theme-light .bg-amber-500\\/20,
+.theme-light .bg-amber-500\\/15,
+.theme-light .bg-amber-500\/20,
+.theme-light .bg-amber-500\/15 {
+  background-color: #fef3c7 !important;
+  color: #b45309 !important;
+  border-color: #f59e0b !important;
+}
+.theme-light .bg-amber-500\\/10,
+.theme-light .bg-amber-500\/10 {
+  background-color: #fffbeb !important;
+  color: #b45309 !important;
+  border-color: #fde68a !important;
+}
+
+/* Emerald green high-contrast overrides */
+.theme-light .text-emerald-400,
+.theme-light .text-emerald-500,
+.theme-light .text-teal-400,
+.theme-light .text-teal-500 {
+  color: #047857 !important;
+}
+.theme-light .bg-emerald-500\\/10,
+.theme-light .bg-emerald-500\\/15,
+.theme-light .bg-emerald-500\/10,
+.theme-light .bg-emerald-500\/15 {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #34d399 !important;
+}
+.theme-light .bg-emerald-500\\/5,
+.theme-light .bg-emerald-500\/5 {
+  background-color: #f0fdf4 !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Red high-contrast overrides */
+.theme-light .text-rose-400,
+.theme-light .text-rose-500 {
+  color: #be123c !important;
+}
+.theme-light .bg-rose-500\\/10,
+.theme-light .bg-rose-500\/10,
+.theme-light .bg-rose-500\\/20,
+.theme-light .bg-rose-500\/20 {
+  background-color: #ffe4e6 !important;
+  color: #be123c !important;
+  border-color: #fca5a5 !important;
+}
+
+/* Logo treatments */
+.theme-light #svg-brand-shield-logo {
+  background-color: #f1f5f9 !important;
+  border-color: var(--border-color) !important;
+}
+.theme-light #svg-brand-shield-logo path:first-child {
+  fill: #ffffff !important;
+  stroke: #d97706 !important;
+}
+
+/* USSD Phone Specific high contrast elements */
+.theme-light .max-w-\\[270px\\],
+.theme-light .max-w-\[270px\] {
+  background-color: #cbd5e1 !important;
+  border-color: #94a3b8 !important;
+}
+.theme-light .max-w-\\[270px\\] .bg-slate-950,
+.theme-light .max-w-\[270px\] .bg-slate-950 {
+  background-color: #64748b !important;
+  color: #ffffff !important;
+  border-color: #475569 !important;
+}
+.theme-light .max-w-\\[270px\\] .bg-slate-900,
+.theme-light .max-w-\[270px\] .bg-slate-900 {
+  background-color: #94a3b8 !important;
+}
+.theme-light .max-w-\\[270px\\] .bg-slate-800,
+.theme-light .max-w-\[270px\] .bg-slate-800 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-light .max-w-\\[270px\\] .bg-slate-800:hover,
+.theme-light .max-w-\[270px\] .bg-slate-800:hover {
+  background-color: #f1f5f9 !important;
+}
+
+@layer base {
+  body {
+    @apply bg-[#0F172A] text-slate-100 antialiased font-sans transition-colors duration-300;
+  }
+  
+  /* Modern sleek scrollbar configuration */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #020617;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+}
+
+/* Premium dynamic fade and slide transition for page/tab switches */
+@keyframes tabFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-fade-in {
+  animation: tabFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity, filter;
+}
+

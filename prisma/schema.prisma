@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── USERS ────────────────────────────────────────────────────────────────────
+// One record per registered person. Phone number is the unique identity key.
+model User {
+  id          String   @id @default(cuid())
+  phone       String   @unique
+  name        String
+  occupation  String
+  cooperative String
+  language    String   @default("en")
+  consented   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // relations
+  otpCodes         OtpCode[]
+  scoreFactors     ScoreFactor?
+  scoreHistory     ScoreHistory[]
+  auditLogs        AuditLog[]
+  endorsements     Endorsement[]
+  linkedAccounts   LinkedAccount[]
+  loanApplications LoanApplication[]
+}
+
+// ─── OTP CODES ────────────────────────────────────────────────────────────────
+// Short-lived codes sent via SMS to verify phone ownership during login.
+model OtpCode {
+  id        String   @id @default(cuid())
+  userId    String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── SCORE FACTORS ────────────────────────────────────────────────────────────
+// The weighted inputs that feed the credit score calculation.
+// Values are 0–100. Set by the server after ingesting real data sources.
+model ScoreFactor {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  momoValue      Float    @default(0)   // Mobile money terminal flow
+  savingsValue   Float    @default(0)   // Cooperative savings rate
+  utilityValue   Float    @default(0)   // Utility bill payment consistency
+  momoSyncedAt   DateTime?              // Last time MoMo API was queried
+  savedAt        DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── SCORE HISTORY ────────────────────────────────────────────────────────────
+// Every time a score is computed it is stored here. Never deleted.
+// This is the real audit trail — replaces the fake in-memory blockchain.
+model ScoreHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  score       Int
+  tier        String   // Bronze | Silver | Gold | Platinum
+  reason      String   // human-readable reason for this snapshot
+  computedAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, computedAt])
+}
+
+// ─── AUDIT LOG ────────────────────────────────────────────────────────────────
+// Append-only log of every action that changed a score.
+// Banks and lenders read this to verify score integrity.
+model AuditLog {
+  id           String   @id @default(cuid())
+  userId       String
+  action       String   // e.g. "MOMO_SYNC", "ENDORSEMENT_ADDED", "SCORE_COMPUTED"
+  scoreBefore  Int
+  scoreAfter   Int
+  source       String   // e.g. "mtn_momo_api", "manual_endorsement", "system"
+  metadata     Json?    // optional extra details (e.g. transaction count, endorser name)
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// ─── ENDORSEMENTS ─────────────────────────────────────────────────────────────
+// Community vouches from SACCO managers and cooperative leaders.
+model Endorsement {
+  id            String   @id @default(cuid())
+  userId        String
+  voucherName   String
+  voucherRole   String
+  cooperative   String
+  status        String   @default("Pending") // Pending | Active | Rejected
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ─── LINKED ACCOUNTS ──────────────────────────────────────────────────────────
+// Mobile money and bank accounts a user has connected for data ingestion.
+model LinkedAccount {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // "MoMo" | "Bank"
+  provider    String   // "MTN" | "Airtel" | "Equity" | "BK"
+  accountNo   String
+  status      String   @default("pending") // pending | linked | unlinked
+  linkedAt    DateTime?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ─── LOAN APPLICATIONS ────────────────────────────────────────────────────────
+// Submitted by users when they click Apply on a matched loan offer.
+model LoanApplication {
+  id          String   @id @default(cuid())
+  userId      String
+  lenderName  String
+  amount      Int
+  purpose     String
+  duration    String
+  scoreAtTime Int
+  tierAtTime  String
+  status      String   @default("Submitted") // Submitted | Under Review | Approved | Rejected
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ─── LENDER TOKENS ────────────────────────────────────────────────────────────
+// API keys issued to banks and microfinance institutions.
+// They use these to query a user's score via the lender API.
+model LenderToken {
+  id           String   @id @default(cuid())
+  lenderName   String
+  token        String   @unique
+  isActive     Boolean  @default(true)
+  queryCount   Int      @default(0)
+  createdAt    DateTime @default(now())
+  lastUsedAt   DateTime?
+}
