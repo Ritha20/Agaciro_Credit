@@ -5,8 +5,11 @@ import { prisma } from "../db/client";
 
 const router = Router();
 
-const require = createRequire(import.meta.url);
-const AfricasTalking = require("africastalking");
+// createRequire with a fallback for CJS bundles where import.meta.url is undefined
+const _require = typeof require !== "undefined"
+  ? require
+  : createRequire(import.meta.url ?? "file://");
+const AfricasTalking = _require("africastalking");
 const at = AfricasTalking({
   apiKey: process.env.AT_API_KEY!,
   username: process.env.AT_USERNAME!,
